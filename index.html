@@ -69,6 +69,7 @@
         .field { margin-top: 14px; }
         .field label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 5px; }
         .req { color: var(--red); font-weight: 700; }
+        .opt { font-weight: 400; color: var(--muted); font-size: 14px; }
         .hint { display: block; color: var(--muted); font-size: 12.5px; margin-top: 4px; }
 
         input[type="text"], input[type="tel"], input[type="email"], input[type="number"],
@@ -172,26 +173,26 @@
             <div class="grid">
                 <div class="field full"><label for="main_name">Full Legal Name <span class="req">*</span></label><input type="text" id="main_name" name="main_name" autocomplete="name" required></div>
                 <div class="field"><label for="main_dob">Date of Birth <span class="req">*</span></label><input type="date" id="main_dob" name="main_dob" autocomplete="bday" required></div>
-                <div class="field"><label for="main_license">Driver’s License #</label><input type="text" id="main_license" name="main_license" autocomplete="off"><span class="hint">Optional. You can provide it later if you are chosen for a viewing.</span></div>
+                <div class="field"><label for="main_license">Driver’s License #</label><input type="text" id="main_license" name="main_license" autocomplete="off"><span class="hint">Optional at this point. You will provide it later if you are chosen for a viewing.</span></div>
                 <div class="field"><label for="main_phone">Phone Number <span class="req">*</span></label><input type="tel" id="main_phone" name="main_phone" autocomplete="tel" inputmode="tel" required></div>
                 <div class="field"><label for="main_email">Email Address <span class="req">*</span></label><input type="email" id="main_email" name="main_email" autocomplete="email" required></div>
-                <div class="field"><label for="main_car">Car - make/model/year</label><input type="text" id="main_car" name="main_car"><span class="hint">Optional. Leave blank if you have no car.</span></div>
+                <div class="field"><label for="main_car">Car - make/model/year</label><input type="text" id="main_car" name="main_car"><span class="hint">Optional at this point. You will provide it later if you are chosen for a viewing.</span></div>
                 <div class="field"><label for="move_in_date">Desired move-in date <span class="req">*</span></label><input type="date" id="move_in_date" name="move_in_date" required></div>
                 <div class="field"><label for="num_adults">How many adults will be living in the property <span class="req">*</span></label><input type="number" id="num_adults" name="num_adults" min="1" max="6" inputmode="numeric" required><span class="hint">Including yourself. A section opens below for each extra adult (Second Adult, Third Adult, etc.).</span></div>
                 <div class="field"><label for="num_children">How many children will be living in the property <span class="req">*</span></label><input type="number" id="num_children" name="num_children" min="0" max="10" inputmode="numeric" required><span class="hint">Enter 0 if none.</span></div>
-                <div class="field full is-hidden" id="children_ages_box"><label for="children_ages">Please provide the age of each child <span class="req">*</span></label><textarea id="children_ages" name="children_ages" data-req disabled></textarea></div>
-                <div class="field"><label for="smoke">Do you smoke cigarettes/cannabis? <span class="req">*</span></label>
-                    <select id="smoke" name="smoke" required><option value="">Select…</option><option value="No">No</option><option value="Yes">Yes</option></select></div>
+                <div class="field"><label for="smoke">Do you smoke or vape cigarettes/cannabis? <span class="req">*</span></label>
+                    <select id="smoke" name="smoke" class="smoke-select" required><option value="">Select…</option><option value="No">No</option><option value="Yes">Yes</option></select></div>
                 <div class="field"><label for="have_pets">Do you have pets? <span class="req">*</span></label>
                     <select id="have_pets" name="have_pets" class="pets-select" required><option value="">Select…</option><option value="No">No</option><option value="Yes">Yes</option></select></div>
+                <div class="field full smoke-extra is-hidden"><label for="smoke_details">Please describe exactly what you use <span class="req">*</span></label><textarea id="smoke_details" name="smoke_details" data-req disabled placeholder="e.g. cigarettes, cannabis, vape / e-cigarette, and how often"></textarea></div>
                 <div class="field pets-extra is-hidden"><label for="num_pets">How many pets do you have? <span class="req">*</span></label><input type="number" id="num_pets" name="num_pets" min="1" inputmode="numeric" data-req disabled></div>
-                <div class="field full pets-extra is-hidden"><label for="pet_details">What kind of pets and their ages <span class="req">*</span></label><textarea id="pet_details" name="pet_details" data-req disabled></textarea></div>
+                <div class="field full pets-extra is-hidden"><label for="pet_details">Please provide the type, breed, weight, and age of each pet <span class="req">*</span></label><textarea id="pet_details" name="pet_details" data-req disabled placeholder="e.g. Dog, Labrador, 60 lb, 4 years"></textarea></div>
             </div>
-            <h4>Reference</h4>
+            <h4>Reference <span class="opt">(optional)</span></h4>
             <div class="grid">
-                <div class="field full"><label for="reference_name">Reference Name <span class="req">*</span></label><input type="text" id="reference_name" name="reference_name" required></div>
-                <div class="field"><label for="reference_relationship">Relationship <span class="req">*</span></label><input type="text" id="reference_relationship" name="reference_relationship" placeholder="e.g. Former employer, friend" required></div>
-                <div class="field"><label for="reference_phone">Reference Phone Number <span class="req">*</span></label><input type="tel" id="reference_phone" name="reference_phone" inputmode="tel" required></div>
+                <div class="field full"><label for="reference_name">Reference Name</label><input type="text" id="reference_name" name="reference_name"><span class="hint">Optional at this point. You will provide it later if you are chosen for a viewing.</span></div>
+                <div class="field"><label for="reference_relationship">Relationship</label><input type="text" id="reference_relationship" name="reference_relationship" placeholder="e.g. Former employer, friend"><span class="hint">Optional at this point. You will provide it later if you are chosen for a viewing.</span></div>
+                <div class="field"><label for="reference_phone">Reference Phone Number</label><input type="tel" id="reference_phone" name="reference_phone" inputmode="tel"><span class="hint">Optional at this point. You will provide it later if you are chosen for a viewing.</span></div>
             </div>
         </section>
 
@@ -202,8 +203,8 @@
                 <div class="field"><label for="residency_length">Length of Residency <span class="req">*</span></label><input type="text" id="residency_length" name="residency_length" placeholder="e.g. 2 years 3 months" required></div>
                 <div class="field"><label for="rent_amount">Current rent amount ($ per month) <span class="req">*</span></label><input type="number" id="rent_amount" name="rent_amount" min="0" inputmode="decimal" required></div>
                 <div class="field full"><label for="reason_moving">Reason for moving? <span class="req">*</span></label><textarea id="reason_moving" name="reason_moving" required></textarea></div>
-                <div class="field full"><label for="landlord_contact">Current Landlord Name &amp; Contact <span class="req">*</span></label><input type="text" id="landlord_contact" name="landlord_contact" placeholder="Name, phone and/or email" required></div>
-                <div class="field full"><label for="previous_address">Previous Address and Landlord Contact</label><textarea id="previous_address" name="previous_address"></textarea><span class="hint">Optional.</span></div>
+                <div class="field full"><label for="landlord_contact">Current Landlord Name &amp; Contact</label><input type="text" id="landlord_contact" name="landlord_contact" placeholder="Name, phone and/or email"><span class="hint">Optional at this point. You will provide it later if you are chosen for a viewing.</span></div>
+                <div class="field full"><label for="previous_address">Previous Address and Landlord Contact</label><textarea id="previous_address" name="previous_address"></textarea><span class="hint">Optional at this point. You will provide it later if you are chosen for a viewing.</span></div>
             </div>
         </section>
 
@@ -214,9 +215,9 @@
                 <div class="field"><label for="main_position">Position/Job Title <span class="req">*</span></label><input type="text" id="main_position" name="main_position" autocomplete="organization-title" required></div>
                 <div class="field"><label for="main_income">Current income ($ per month, before tax) <span class="req">*</span></label><input type="number" id="main_income" name="main_income" min="0" inputmode="decimal" required></div>
                 <div class="field"><label for="main_duration">How long with this employer <span class="req">*</span></label><input type="text" id="main_duration" name="main_duration" placeholder="e.g. 3 years" required></div>
-                <div class="field full"><label for="main_employer_contact">Employer Contact <span class="req">*</span></label><input type="text" id="main_employer_contact" name="main_employer_contact" placeholder="Supervisor name, phone and/or email" required></div>
-                <div class="field full"><label for="main_employer_address">Employer address</label><input type="text" id="main_employer_address" name="main_employer_address"><span class="hint">Optional.</span></div>
-                <div class="field full"><label for="main_previous_occupation">Previous occupation details</label><input type="text" id="main_previous_occupation" name="main_previous_occupation"><span class="hint">Optional.</span></div>
+                <div class="field full"><label for="main_employer_contact">Employer Contact</label><input type="text" id="main_employer_contact" name="main_employer_contact" placeholder="Supervisor name, phone and/or email"><span class="hint">Optional at this point. You will provide it later if you are chosen for a viewing.</span></div>
+                <div class="field full"><label for="main_employer_address">Employer address</label><input type="text" id="main_employer_address" name="main_employer_address"><span class="hint">Optional at this point. You will provide it later if you are chosen for a viewing.</span></div>
+                <div class="field full"><label for="main_previous_occupation">Previous occupation details</label><input type="text" id="main_previous_occupation" name="main_previous_occupation"><span class="hint">Optional at this point. You will provide it later if you are chosen for a viewing.</span></div>
             </div>
         </section>
 
@@ -304,18 +305,20 @@
                 <div class="grid">
                     <div class="full">${fld('Full Legal Name', 'text', p + 'name', true, 'autocomplete="off"')}</div>
                     ${fld('Date of Birth', 'date', p + 'dob', true, `min="1920-01-01" max="${todayStr(-18)}"`)}
-                    ${fld('Driver’s License #', 'text', p + 'license', false, 'autocomplete="off"', 'Optional. You can provide it later if you are chosen for a viewing.')}
+                    ${fld('Driver’s License #', 'text', p + 'license', false, 'autocomplete="off"', 'Optional at this point. You will provide it later if you are chosen for a viewing.')}
                     ${fld('Phone Number', 'tel', p + 'phone', true, 'inputmode="tel"')}
                     ${fld('Email Address', 'email', p + 'email', true, '')}
-                    <div class="full">${fld('Car - make/model/year', 'text', p + 'car', false, '')}</div>
-                    <div class="field"><label for="${p}smoke">Do you smoke cigarettes/cannabis? <span class="req">*</span></label>
-                        <select id="${p}smoke" name="${p}smoke" required>${YN_OPTIONS}</select></div>
+                    <div class="full">${fld('Car - make/model/year', 'text', p + 'car', false, '', 'Optional at this point. You will provide it later if you are chosen for a viewing.')}</div>
+                    <div class="field"><label for="${p}smoke">Do you smoke or vape cigarettes/cannabis? <span class="req">*</span></label>
+                        <select id="${p}smoke" name="${p}smoke" class="smoke-select" required>${YN_OPTIONS}</select></div>
                     <div class="field"><label for="${p}have_pets">Do you have pets? <span class="req">*</span></label>
                         <select id="${p}have_pets" name="${p}have_pets" class="pets-select" required>${YN_OPTIONS}</select></div>
+                    <div class="field full smoke-extra is-hidden"><label for="${p}smoke_details">Please describe exactly what you use <span class="req">*</span></label>
+                        <textarea id="${p}smoke_details" name="${p}smoke_details" data-req disabled placeholder="e.g. cigarettes, cannabis, vape / e-cigarette, and how often"></textarea></div>
                     <div class="field pets-extra is-hidden"><label for="${p}num_pets">How many pets do you have? <span class="req">*</span></label>
                         <input type="number" id="${p}num_pets" name="${p}num_pets" min="1" inputmode="numeric" data-req disabled></div>
-                    <div class="field full pets-extra is-hidden"><label for="${p}pet_details">What kind of pets and their ages <span class="req">*</span></label>
-                        <textarea id="${p}pet_details" name="${p}pet_details" data-req disabled></textarea></div>
+                    <div class="field full pets-extra is-hidden"><label for="${p}pet_details">Please provide the type, breed, weight, and age of each pet <span class="req">*</span></label>
+                        <textarea id="${p}pet_details" name="${p}pet_details" data-req disabled placeholder="e.g. Dog, Labrador, 60 lb, 4 years"></textarea></div>
                 </div>
                 <h4>Employment &amp; Income Verification</h4>
                 <div class="grid">
@@ -323,27 +326,29 @@
                     ${fld('Position/Job Title', 'text', p + 'position', true, '')}
                     ${fld('Current income ($ per month, before tax)', 'number', p + 'income', true, 'min="0" inputmode="decimal"')}
                     ${fld('How long with this employer', 'text', p + 'duration', true, '')}
-                    <div class="full">${fld('Employer Contact', 'text', p + 'employer_contact', true, '')}</div>
-                    <div class="full">${fld('Employer address', 'text', p + 'employer_address', false, '')}</div>
-                    <div class="full">${fld('Previous occupation details', 'text', p + 'previous_occupation', false, '')}</div>
+                    <div class="full">${fld('Employer Contact', 'text', p + 'employer_contact', false, '', 'Optional at this point. You will provide it later if you are chosen for a viewing.')}</div>
+                    <div class="full">${fld('Employer address', 'text', p + 'employer_address', false, '', 'Optional at this point. You will provide it later if you are chosen for a viewing.')}</div>
+                    <div class="full">${fld('Previous occupation details', 'text', p + 'previous_occupation', false, '', 'Optional at this point. You will provide it later if you are chosen for a viewing.')}</div>
                 </div>`;
             container.appendChild(sec);
         }
         container.querySelectorAll('input, select, textarea').forEach(el => { if (saved[el.name]) el.value = saved[el.name]; });
-        container.querySelectorAll('.pets-select').forEach(s => s.dispatchEvent(new Event('change', { bubbles: true })));
+        container.querySelectorAll('.pets-select, .smoke-select').forEach(s => s.dispatchEvent(new Event('change', { bubbles: true })));
     }
 
     document.getElementById('num_adults').addEventListener('input', addAdultSections);
     document.getElementById('num_adults').addEventListener('change', addAdultSections);
 
-    document.getElementById('num_children').addEventListener('input', function () {
-        setVisible(document.getElementById('children_ages_box'), parseInt(this.value) > 0);
-    });
-
     document.addEventListener('change', function (e) {
-        if (!e.target.classList || !e.target.classList.contains('pets-select')) return;
-        const show = e.target.value === 'Yes';
-        e.target.closest('.card').querySelectorAll('.pets-extra').forEach(box => setVisible(box, show));
+        const t = e.target;
+        if (!t.classList) return;
+        const targets = { 'pets-select': '.pets-extra', 'smoke-select': '.smoke-extra' };
+        for (const cls in targets) {
+            if (t.classList.contains(cls)) {
+                const show = t.value === 'Yes';
+                t.closest('.card').querySelectorAll(targets[cls]).forEach(box => setVisible(box, show));
+            }
+        }
     });
 
     // sensible defaults
