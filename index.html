@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenant Application Form - Arklow Drive</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: blue;
+        }
+        h3 {
+            text-align: center;
+            color: blue;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .button-group button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .pdf-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .send-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .send-btn:disabled {
+            background-color: #8fcf9f;
+            cursor: not-allowed;
+        }
+        #status {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+        #status.success { display: block; background: #d4edda; color: #155724; }
+        #status.error   { display: block; background: #f8d7da; color: #721c24; }
+        #status.info    { display: block; background: #d1ecf1; color: #0c5460; }
+        .hidden-field { display: none !important; }
+        @media print {
+            .button-group, #status { display: none !important; }
+        }
+    </style>
+    <script>
+        const LANDLORD_EMAIL = 'arklowdrivehouse@gmail.com';
+
+        function addAdultSections() {
+            const numAdults = parseInt(document.getElementById('num_adults').value);
+            const container = document.getElementById('additional_adults');
+            container.innerHTML = '';
+            for (let i = 1; i < numAdults; i++) {
+                const div = document.createElement('div');
+                div.className = 'section';
+                div.innerHTML = `
+                    <h3 style='color:blue;'>Additional Adult ${i}</h3>
+                    <label>Full Legal Name</label><input type="text" name="adult_${i}_name">
+                    <label>Date of Birth</label><input type="date" name="adult_${i}_dob">
+                    <label>Driver’s License #</label><input type="text" name="adult_${i}_license">
+                    <label>Car - make/model/year</label><input type="text" name="adult_${i}_car">
+                    <label>Phone Number</label><input type="tel" name="adult_${i}_phone">
+                    <label>Email Address</label><input type="email" name="adult_${i}_email">
+                    <h4>Employment & Income Verification</h4>
+                    <label>Current employer</label><input type="text" name="adult_${i}_employer">
+                    <label>Position/Job Title</label><input type="text" name="adult_${i}_position">
+                    <label>Current income</label><input type="number" name="adult_${i}_income">
+                    <label>How long with this employer</label><input type="text" name="adult_${i}_duration">
+                    <label>Employer Contact</label><input type="text" name="adult_${i}_employer_contact">
+                    <label>Employer address</label><input type="text" name="adult_${i}_employer_address">
+                    <label>Previous occupation details</label><input type="text" name="adult_${i}_previous_occupation">
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        function allConsentsChecked() {
+            const checkboxes = document.querySelectorAll('.consent-checkbox');
+            for (let checkbox of checkboxes) {
+                if (!checkbox.checked) return false;
+            }
+            return true;
+        }
+
+        function validateCheckboxesBeforePrint() {
+            if (!allConsentsChecked()) {
+                alert('Please agree to all consent statements before downloading the PDF.');
+                return;
+            }
+            window.print();
+        }
+
+        function showStatus(type, message) {
+            const el = document.getElementById('status');
+            el.className = type;
+            el.textContent = message;
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Find a readable label for a form field
+        function labelFor(el) {
+            let text = '';
+            if (el.type === 'checkbox') {
+                const wrap = el.closest('label');
+                text = wrap ? wrap.textContent.trim() : el.name;
+            } else {
+                const prev = el.previousElementSibling;
+                text = (prev && prev.tagName === 'LABEL') ? prev.textContent.trim() : el.name;
+            }
+            const m = el.name.match(/^adult_(\d+)_/);
+            if (m) text = `Additional Adult ${m[1]} - ${text}`;
+            return text;
+        }
+
+        async function sendApplication() {
+            const form = document.getElementById('applicationForm');
+            const btn = document.getElementById('sendBtn');
+
+            // Required checks
+            const name = form.elements['main_name'].value.trim();
+            const email = form.elements['main_email'].value.trim();
+            const phone = form.elements['main_phone'].value.trim();
+            if (!name || !email || !phone) {
+                alert('Please fill in your Full Legal Name, Phone Number and Email Address before sending.');
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            if (!allConsentsChecked()) {
+                alert('Please agree to all consent statements before sending the application.');
+                return;
+            }
+            if (!form.elements['applicant_name'].value.trim() || !form.elements['application_date'].value || !form.elements['signature'].value.trim()) {
+                alert('Please complete the Applicant Name, Date and Signature fields before sending.');
+                return;
+            }
+
+            // Build payload in the same order as the form, with readable labels
+            const payload = {};
+            let idx = 1;
+            for (const el of form.elements) {
+                if (!el.name || el.type === 'button' || el.type === 'submit') continue;
+                const key = `${String(idx++).padStart(2, '0')} - ${labelFor(el)}`;
+                payload[key] = el.type === 'checkbox' ? (el.checked ? 'YES - Agreed' : 'NO') : (el.value || '(not provided)');
+            }
+            payload['email'] = email; // lets you hit "Reply" and answer the applicant directly
+            payload['_subject'] = `New Tenant Application - Arklow Drive - ${name}`;
+            payload['_template'] = 'table';
+            payload['_captcha'] = 'false';
+
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            showStatus('info', 'Sending your application, please wait...');
+
+            try {
+                const response = await fetch(`https://formsubmit.co/ajax/${LANDLORD_EMAIL}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json().catch(() => ({}));
+                if (response.ok && (result.success === true || result.success === 'true')) {
+                    showStatus('success', 'Thank you! Your application has been sent successfully. Only successful applicants will be contacted for a viewing.');
+                    btn.textContent = 'Application Sent ✔';
+                } else {
+                    throw new Error(result.message || 'Send failed');
+                }
+            } catch (err) {
+                console.error(err);
+                showStatus('error', 'Sorry, we could not send your application. Please check your internet connection and try again. If the problem continues, use "Download as PDF" and email it to ' + LANDLORD_EMAIL + '.');
+                btn.disabled = false;
+                btn.textContent = 'Send Application';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Tenant Application Form</h2>
+        <h3>Location: ARKLOW DRIVE, COLE HARBOUR</h3>
+        <form id="applicationForm" onsubmit="return false;">
+            <label>Full Legal Name</label><input type="text" name="main_name">
+            <label>Date of Birth</label><input type="date" name="main_dob">
+            <label>Driver’s License #</label><input type="text" name="main_license">
+            <label>Car - make/model/year</label><input type="text" name="main_car">
+            <label>Phone Number</label><input type="tel" name="main_phone">
+            <label>Email Address</label><input type="email" name="main_email">
+            <label>How many adults will be living in the property</label><input type="number" id="num_adults" name="num_adults" onchange="addAdultSections()">
+            <label>How many children will be living in the Property</label><input type="number" name="num_children">
+            <label>Please provide the age of each child</label><textarea name="children_ages"></textarea>
+
+            <div class="section">
+                <h3 style="color:blue;">Rental History</h3>
+                <label>Current Address</label><textarea name="current_address"></textarea>
+                <label>Length of Residency</label><input type="text" name="residency_length">
+                <label>Current rent amount</label><input type="number" name="rent_amount">
+                <label>Reason for moving?</label><textarea name="reason_moving"></textarea>
+                <label>Current Landlord Name & Contact</label><input type="text" name="landlord_contact">
+                <label>Previous Address and Landlord Contact</label><textarea name="previous_address"></textarea>
+                <label>Do you smoke cigarettes/cannabis?</label><select name="smoke">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+
+            <div class="section">
+                <h3 style="color:blue;">Employment & Income Verification</h3>
+                <label>Current employer</label><input type="text" name="main_employer">
+                <label>Position/Job Title</label><input type="text" name="main_position">
+                <label>Current income</label><input type="number" name="main_income">
+                <label>How long with this employer</label><input type="text" name="main_duration">
+                <label>Employer Contact</label><input type="text" name="main_employer_contact">
+                <label>Employer address</label><input type="text" name="main_employer_address">
+                <label>Previous occupation details</label><input type="text" name="main_previous_occupation">
+            </div>
+
+            <div class="section">
+                <h3 style="color:blue;">Additional Information</h3>
+                <label>Reference Name</label><input type="text" name="reference_name">
+                <label>Relationship</label><input type="text" name="reference_relationship">
+                <label>Phone Number</label><input type="tel" name="reference_phone">
+                <label>Do you have pets?</label><select name="have_pets">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+                <label>How many Pets do you have?</label><input type="number" name="num_pets">
+                <label>What kind of pets and their ages</label><textarea name="pet_details"></textarea>
+            </div>
+
+            <div id="additional_adults"></div>
+
+            <div class="section">
+                <h3 style="color:blue;">Consent & Authorization</h3>
+                <label><input type="checkbox" class="consent-checkbox" name="consent_contact"> I authorize the landlord to contact my references, employers, and previous landlords.</label>
+                <label><input type="checkbox" class="consent-checkbox" name="consent_credit"> I authorize the landlord to obtain a credit report as part of the screening process.</label>
+                <label><input type="checkbox" class="consent-checkbox" name="consent_certify"> I certify that the information provided is true and complete.</label>
+                <label><input type="checkbox" class="consent-checkbox" name="consent_documents"> I will provide ID or Driver License for all adults, Proof of Income for all adults, References or Recommendations, as well as a Tenant Report/Credit Check from the SingleKey.com website for the landlord's review.</label>
+                <p>Landlord will provide the link to the SingleKey.com website, and the Applicants should apply for Tenant Report/Credit Check, which is required.</p>
+                <p><strong>Only successful applicants will be contacted for a viewing.</strong></p>
+            </div>
+
+            <label>Applicant Name</label><input type="text" name="applicant_name">
+            <label>Date</label><input type="date" name="application_date">
+            <label>Signature</label><input type="text" name="signature">
+
+            <!-- Spam trap: real people never see or fill this -->
+            <input type="text" name="_honey" class="hidden-field" tabindex="-1" autocomplete="off">
+
+            <div class="button-group">
+                <button type="button" class="send-btn" id="sendBtn" onclick="sendApplication()">Send Application</button>
+                <button type="button" class="pdf-btn" onclick="validateCheckboxesBeforePrint()">Download as PDF</button>
+            </div>
+            <div id="status" role="status"></div>
+        </form>
+    </div>
+</body>
+</html>
